@@ -8,5 +8,6 @@ import java.util.UUID;
 public interface TaskRepository extends JpaRepository<KanbanTask, UUID> {
 
     // TODO 3: declare uma derived query para buscar tarefas da coluna
+    List<KanbanTask> findByColumn_IdOrderByPositionAsc(UUID columnId);
     // ordenadas pela posição crescente.
 }

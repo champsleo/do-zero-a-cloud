@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,11 +31,14 @@ public class KanbanTask {
     private UUID id;
 
     @Getter
-    // TODO 3a: mapeie o nome como coluna obrigatória com no máximo 120 caracteres.
+    // TODO 3a: mapeie o nome como coluna obrigatória com no máximo 120 caracteres. - OK
+    @Column(nullable = false, length = 120)
     private String name;
 
     @Getter
-    // TODO 3a: mapeie a posição na coluna física position, obrigatória e positivo ou zero.
+    // TODO 3a: mapeie a posição na coluna física position, obrigatória e positivo ou zero. - OK
+    @PositiveOrZero
+    @Column(name= "position", nullable = false)
     private int position;
 
     @Getter
@@ -69,8 +73,14 @@ public class KanbanTask {
             List<String> tags,
             BoardColumn column
     ) {
-        // TODO 3: inicialize todos os campos e faça uma cópia defensiva das tags.
-        throw new UnsupportedOperationException("TODO 3: construir tarefa");
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.position = position;
+        this.createdAt = createdAt;
+        this.dueDate = dueDate;
+        this.completed = completed;
+        this.tags = new ArrayList<>(tags);
+        this.column = column;
     }
 
     public List<String> getTags() {
@@ -85,7 +95,13 @@ public class KanbanTask {
             List<String> tags,
             BoardColumn column
     ) {
-        // TODO 3: atualize os campos permitidos sem alterar createdAt.
-        throw new UnsupportedOperationException("TODO 3: atualizar tarefa");
+        this.name = name;
+        this.position = position;
+        this.dueDate = dueDate;
+        this.completed = completed;
+        this.tags.clear();
+        this.tags.addAll(tags);
+        this.column = column;
     }
 }
+

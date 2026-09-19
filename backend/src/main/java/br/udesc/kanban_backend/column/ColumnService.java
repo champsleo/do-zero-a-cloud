@@ -21,16 +21,22 @@ public class ColumnService {
 
     @Transactional(readOnly = true)
     public List<ColumnResponse> listByBoard(UUID boardId) {
-        // TODO 2: confirme que o quadro existe, consulte o repository em ordem
-        // de posição e converta as entidades para response.
-        throw new UnsupportedOperationException("TODO 2: listar colunas do quadro");
+        findBoard(boardId);
+        return columnRepository.findByBoard_IdOrderByPositionAsc(boardId).stream()
+                .map(ColumnService::toResponse)
+                .toList();
     }
 
     @Transactional
     public ColumnResponse create(ColumnRequest request) {
-        // TODO 2: localize o quadro, remova espaços do nome, construa a coluna
-        // e persista antes de responder.
-        throw new UnsupportedOperationException("TODO 2: criar coluna");
+        Board board = findBoard(request.boardId());
+        BoardColumn column = new BoardColumn(
+                request.name().trim(),
+                request.position(),
+                board
+        );
+        BoardColumn saved = columnRepository.save(column);
+        return toResponse(saved);
     }
 
     @Transactional
